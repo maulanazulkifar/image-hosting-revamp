@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Hosting Service</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .image-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .image-item {
+        border: 1px solid #ccc;
+        padding: 10px;
+      }
+      .image-item img {
+        max-width: 200px;
+      }
+      .actions {
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Image Hosting Service</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="file" id="file-input" name="image" required />
+      <button type="submit">Upload</button>
+    </form>
+    <div id="message"></div>
+    <h2>Uploaded Images</h2>
+    <div id="image-list" class="image-list"></div>
+
+    <script>
+      async function fetchImages() {
+        const response = await fetch("/images");
+        const images = await response.json();
+        const imageList = document.getElementById("image-list");
+        imageList.innerHTML = "";
+        images.forEach((image) => {
+          const div = document.createElement("div");
+          div.className = "image-item";
+          div.innerHTML = `
+                    <img src="${image.url}" alt="${image.name}">
+                    <div class="actions">
+                        <button onclick="deleteImage('${image.name}')">Delete</button>
+                    </div>
+                `;
+          imageList.appendChild(div);
+        });
+      }
+
+      async function deleteImage(name) {
+        const response = await fetch(`/images/${name}`, { method: "DELETE" });
+        const result = await response.json();
+        alert(result.message);
+        fetchImages();
+      }
+
+      document
+        .getElementById("upload-form")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const fileInput = document.getElementById("file-input");
+          const formData = new FormData();
+          formData.append("image", fileInput.files[0]);
+
+          const response = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const result = await response.json();
+          document.getElementById("message").textContent = result.message;
+          fetchImages();
+        });
+
+      fetchImages();
+    </script>
+  </body>
+</html>
