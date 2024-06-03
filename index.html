@@ -43,11 +43,11 @@
         const images = await response.json();
         const imageList = document.getElementById("image-list");
         imageList.innerHTML = "";
-        images.forEach((image) => {
+        images.objects.forEach((image) => {
           const div = document.createElement("div");
           div.className = "image-item";
           div.innerHTML = `
-                    <img src="${image.url}" alt="${image.name}">
+                    <img src="https://image-hosting.maulanazulkifar.com/${image.key}" alt="${image.name}">
                     <div class="actions">
                         <button onclick="deleteImage('${image.name}')">Delete</button>
                     </div>
@@ -75,7 +75,7 @@
           formData.append("image", fileInput.files[0]);
 
           const response = await fetch(
-            "https://image-hosting-worker.maulanazulkifar.workers.dev/upload",
+            "https://image-hosting-worker.maulanazulkifar.workers.dev/",
             {
               method: "POST",
               body: formData,
