@@ -38,7 +38,7 @@
     <script>
       async function fetchImages() {
         const response = await fetch(
-          "https://image-hosting-worker.maulanazulkifar.workers.dev/images"
+          "https://image-hosting-worker.maulanazulkifar.workers.dev/"
         );
         const images = await response.json();
         const imageList = document.getElementById("image-list");
