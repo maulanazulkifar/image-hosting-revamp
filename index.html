@@ -37,7 +37,9 @@
 
     <script>
       async function fetchImages() {
-        const response = await fetch("/images");
+        const response = await fetch(
+          "https://image-hosting-worker.maulanazulkifar.workers.dev/images"
+        );
         const images = await response.json();
         const imageList = document.getElementById("image-list");
         imageList.innerHTML = "";
@@ -55,7 +57,10 @@
       }
 
       async function deleteImage(name) {
-        const response = await fetch(`/images/${name}`, { method: "DELETE" });
+        const response = await fetch(
+          `https://image-hosting-worker.maulanazulkifar.workers.dev/images/${name}`,
+          { method: "DELETE" }
+        );
         const result = await response.json();
         alert(result.message);
         fetchImages();
@@ -69,10 +74,13 @@
           const formData = new FormData();
           formData.append("image", fileInput.files[0]);
 
-          const response = await fetch("/upload", {
-            method: "POST",
-            body: formData,
-          });
+          const response = await fetch(
+            "https://image-hosting-worker.maulanazulkifar.workers.dev/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
 
           const result = await response.json();
           document.getElementById("message").textContent = result.message;
