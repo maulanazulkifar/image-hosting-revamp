@@ -7,7 +7,7 @@ import {
     CardActions,
     CardContent,
     CardMedia, CircularProgress,
-    Container, IconButton, Input, InputAdornment,
+    Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, InputAdornment,
     styled, TextField,
     Typography
 } from "@mui/material";
@@ -36,6 +36,7 @@ function SearchIcon() {
 const Home = () => {
     const [images, setImages] = useState([]);
     const [isLoad, setIsLoad] = useState(false);
+    const [password, setPassword] = useState();
     useEffect(() =>{
         fetchImage();
     },[])
@@ -48,17 +49,46 @@ const Home = () => {
         })
     }
     const handlePostImage = (data) => {
-        setIsLoad(true);
-        const formData = new FormData();
-        formData.append("image", data);
-        PostImage(formData).then(res => {
-            console.log(res);
-        }).finally(() => {
-            fetchImage();
-        })
+        if (password === 'imi2024') {
+            setIsLoad(true);
+            const formData = new FormData();
+            formData.append("image", data);
+            PostImage(formData).then(res => {
+                console.log(res);
+            }).finally(() => {
+                fetchImage();
+            })
+        }
     }
     return(
       <Container>
+          <Backdrop
+              sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+              open={password !== 'imi2024'}
+          >
+              <Dialog
+                  open={password !== 'imi2024'}
+              >
+                  <DialogTitle>Locked</DialogTitle>
+                  <DialogContent>
+                      <DialogContentText>
+                          Masukan Password untuk mengakses halaman atau minta ke administrator
+                      </DialogContentText>
+                      <TextField
+                          autoFocus
+                          required
+                          margin="dense"
+                          id="password"
+                          name="password"
+                          label="Password"
+                          type="password"
+                          fullWidth
+                          variant="outlined"
+                          onChange={event => setPassword(event.target.value)}
+                      />
+                  </DialogContent>
+              </Dialog>
+          </Backdrop>
           {
               isLoad? <Backdrop
                   sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

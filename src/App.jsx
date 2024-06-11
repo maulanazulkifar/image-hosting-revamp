@@ -11,6 +11,7 @@ function App() {
   return (
       <>
           <Home/>
+          <button onClick={() => methodDoesNotExist()}>Break the world</button>
       </>
   )
 }
