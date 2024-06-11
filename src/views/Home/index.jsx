@@ -51,7 +51,7 @@ const Home = () => {
         if (password === 'imi2024') {
             const options = {
                 maxSizeMB: 1,
-                maxWidthOrHeight: 800,
+                maxWidthOrHeight: 2000,
                 useWebWorker: true
             };
 
