@@ -118,7 +118,7 @@ const Home = () => {
                     startIcon={<CloudUploadIcon />}
                 >
                     Upload file
-                    <VisuallyHiddenInput type="file" onInput={e => handlePostImage(e.target.files[0])} />
+                    <VisuallyHiddenInput accept="image/*"  type="file" onInput={e => handlePostImage(e.target.files[0])} />
                 </Button>
             </Box>
             <Box sx={{display: 'flex'}} flexWrap={'wrap'} justifyContent={"center"} columnGap={2} rowGap={2}>
