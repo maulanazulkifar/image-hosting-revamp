@@ -30,6 +30,7 @@ const VisuallyHiddenInput = styled('input')({
 });
 
 const Home = () => {
+    const key = import.meta.env.VITE_UPLOAD_KEY;
     const [images, setImages] = useState([]);
     const [isLoad, setIsLoad] = useState(false);
     const [password, setPassword] = useState();
@@ -48,7 +49,7 @@ const Home = () => {
     };
 
     const handlePostImage = async (data) => {
-        if (password === 'imi2024') {
+        if (password === key) {
             const options = {
                 maxSizeMB: 1,
                 maxWidthOrHeight: 2000,
@@ -77,9 +78,9 @@ const Home = () => {
         <Container>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={password !== 'imi2024'}
+                open={password !== key}
             >
-                <Dialog open={password !== 'imi2024'}>
+                <Dialog open={password !== key}>
                     <DialogTitle>Locked</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
