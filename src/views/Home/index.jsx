@@ -50,7 +50,7 @@ const Home = () => {
     const fetchImage = () => {
         setIsLoad(true);
         getImage().then(res => {
-            setImages(res.objects);
+            setImages(res.objects.reverse());
         }).finally(() => {
             setIsLoad(false);
         });
@@ -183,6 +183,7 @@ const Home = () => {
                     onChange={handleChangePage}
                     variant="outlined"
                     shape="rounded"
+                    color="secondary"
                 />
             </Box>
         </Container>
