@@ -4,13 +4,19 @@ import {
     Box,
     Button,
     Card,
-    CardActionArea,
-    CardActions,
     CardContent,
-    CardMedia, CircularProgress,
-    Container, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Input, InputAdornment,
-    styled, TextField,
-    Typography
+    CardMedia,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    TextField,
+    Typography,
+    Pagination, styled
 } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import imageCompression from 'browser-image-compression';
@@ -34,10 +40,12 @@ const Home = () => {
     const [images, setImages] = useState([]);
     const [isLoad, setIsLoad] = useState(false);
     const [password, setPassword] = useState();
+    const [page, setPage] = useState(1);
+    const imagesPerPage = 6;
 
     useEffect(() => {
         fetchImage();
-    }, []);
+    }, [page]);
 
     const fetchImage = () => {
         setIsLoad(true);
@@ -74,6 +82,12 @@ const Home = () => {
         }
     };
 
+    const handleChangePage = (event, value) => {
+        setPage(value);
+    };
+
+    const currentImages = images.slice((page - 1) * imagesPerPage, page * imagesPerPage);
+
     return (
         <Container>
             <Backdrop
@@ -101,6 +115,7 @@ const Home = () => {
                     </DialogContent>
                 </Dialog>
             </Backdrop>
+
             {isLoad && (
                 <Backdrop
                     sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -109,48 +124,65 @@ const Home = () => {
                     <CircularProgress color="inherit" />
                 </Backdrop>
             )}
-            <Typography variant={'h4'}>Media<br/>Image Hosting Server</Typography>
-            <Box paddingY={2}>
+
+            <Typography variant="h4" align="center" sx={{ mb: 3 }}>
+                Media Image Hosting Server
+            </Typography>
+
+            <Box paddingY={2} display="flex" justifyContent="center">
                 <Button
                     component="label"
-                    role={undefined}
                     variant="contained"
-                    tabIndex={-1}
                     startIcon={<CloudUploadIcon />}
+                    sx={{ width: 'auto', textAlign: 'center' }}
                 >
                     Upload file
-                    <VisuallyHiddenInput accept="image/*"  type="file" onInput={e => handlePostImage(e.target.files[0])} />
+                    <VisuallyHiddenInput accept="image/*" type="file" onInput={e => handlePostImage(e.target.files[0])} />
                 </Button>
             </Box>
-            <Box sx={{display: 'flex'}} flexWrap={'wrap'} justifyContent={"center"} columnGap={2} rowGap={2}>
-                {images.toReversed().map(item => (
-                    <div key={item.key}>
-                        <Card sx={{ width: 345 }}>
-                            <CardMedia
-                                component="img"
-                                height="140"
-                                image={'https://image-hosting.maulanazulkifar.com/' + item.key}
-                                alt="green iguana"
-                            />
-                            <CardContent>
-                                <Box sx={{display: 'flex'}}>
-                                    <input
-                                        readOnly
-                                        className='form-control'
-                                        type='text'
-                                        id='input-with-icon-adornment'
-                                        placeholder='Search order'
-                                        aria-label='Search'
-                                        value={'https://image-hosting.maulanazulkifar.com/' + item.key}
-                                    />
-                                    <Button onClick={() => navigator.clipboard.writeText('https://image-hosting.maulanazulkifar.com/' + item.key)}>
-                                        Copy
-                                    </Button>
-                                </Box>
-                            </CardContent>
-                        </Card>
-                    </div>
+
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 2 }}>
+                {currentImages.map(item => (
+                    <Card sx={{ width: 345, boxShadow: 3, transition: 'transform 0.3s ease', '&:hover': { transform: 'scale(1.05)' } }} key={item.key}>
+                        <CardMedia
+                            component="img"
+                            height="140"
+                            image={'https://image-hosting.maulanazulkifar.com/' + item.key}
+                            alt="Uploaded Image"
+                        />
+                        <CardContent>
+                            <Typography variant="h6" component="div" sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                Image URL
+                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <input
+                                    readOnly
+                                    className='form-control'
+                                    type='text'
+                                    value={'https://image-hosting.maulanazulkifar.com/' + item.key}
+                                    style={{ flex: 1, padding: 8, fontSize: 14 }}
+                                />
+                                <Button
+                                    onClick={() => navigator.clipboard.writeText('https://image-hosting.maulanazulkifar.com/' + item.key)}
+                                    variant="contained"
+                                    size="small"
+                                    sx={{ ml: 1 }}
+                                >
+                                    Copy
+                                </Button>
+                            </Box>
+                        </CardContent>
+                    </Card>
                 ))}
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                <Pagination
+                    count={Math.ceil(images.length / imagesPerPage)}
+                    page={page}
+                    onChange={handleChangePage}
+                    color="primary"
+                />
             </Box>
         </Container>
     );
