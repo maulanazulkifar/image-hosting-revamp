@@ -184,6 +184,11 @@ const Home = () => {
                     variant="outlined"
                     shape="rounded"
                     color="secondary"
+                    sx={{
+                        "& .MuiPaginationItem-root": {
+                            color: "white",  // Set text color of pagination items to white
+                        }
+                    }}
                 />
             </Box>
         </Container>
