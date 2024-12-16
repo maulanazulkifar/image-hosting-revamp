@@ -181,7 +181,8 @@ const Home = () => {
                     count={Math.ceil(images.length / imagesPerPage)}
                     page={page}
                     onChange={handleChangePage}
-                    color="primary"
+                    variant="outlined"
+                    shape="rounded"
                 />
             </Box>
         </Container>
